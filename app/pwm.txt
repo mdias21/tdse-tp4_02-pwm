@@ -1,0 +1,24 @@
+periodo:1 mS NO SE MODIFICA
+duty cicle: de 0 a 100 se define como el ciclo activo (El porcentaje que la señal permanece en "alto" durante un periodo) 
+
+comparaciones: en test 1, estamos modulando en ancho de pulso, es decir estamos cambiando el duty-cicle, sin cambiar el periodo de la señal.
+en test 2, estamos modulando en frecuencia (manteniendo el duty-cicle al 50% ) la frecuencia varía desde 4kHz a 2Khz
+
+	if (HAL_GetTick()>=tick) {
+		setPWM(htim3, TIM_CHANNEL_1, period, period/2);
+		if (step>0) {
+			if (period-step>=PERIOD/2) {
+				step = step * -1;
+			}
+		}
+		else {
+			if (period-step<=PERIOD/4) {
+				step = step * -1;
+			}
+		}
+		period = period + step;
+		tick = HAL_GetTick() + DELAY_TICKS;
+}	
+
+Ejecutando el test 1 se puede obsevar que el led varía su intensidad al variar el ciclo activo debido al cambio en el valor eficaz de la señal.
+Ejecutando el test 2 se puede observar que no existe cambio en la intensidad de luz emitida por el led. Ya que el ciclo activo de la señal permancece constante, solo variando la frecuencia.
